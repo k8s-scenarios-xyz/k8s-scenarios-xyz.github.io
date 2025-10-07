@@ -422,7 +422,22 @@
                         </div>
                     </div>
                 </div>
-                
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="issue-tag">4.4 Networking</span>
+                                Your Issue Title Here
+                            </div>
+                            <span class="issue-meta">1 day ago</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Short description of your issue here.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="#" class="btn btn-outline-primary btn-sm read-more" data-issue="4">Read More</a>
+                                <button class="helpful-btn">Helpful? <span>0</span></button>
+                            </div>
+                        </div>
+                    </div>
                 <!-- Detail Views -->
                 <div id="detailView1" class="content-section">
                     <a href="#" class="back-button"><i class="fas fa-arrow-left me-2"></i>Back to all scenarios</a>
@@ -542,6 +557,45 @@ sudo systemctl restart kubelet</pre>
                                 <li>Regularly check certificate expiration in the cluster</li>
                                 <li>Implement automated certificate rotation</li>
                                 <li>Monitor node status after reboots</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="detailView4" class="content-section">
+                    <a href="#" class="back-button"><i class="fas fa-arrow-left me-2"></i>Back to all scenarios</a>
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="issue-tag">Scenario D: (4) Networking</span>
+                            <span class="issue-meta">K8s v1.25, AWS EKS</span>
+                        </div>
+                        <div class="card-body">
+                            <h3>Your Full Issue Title</h3>
+                            <p class="text-muted">Brief overview of the issue</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div>
+                                    <span class="badge bg-danger">High Severity</span>
+                                    <span class="badge bg-info">K8s v1.25</span>
+                                </div>
+                                <button class="helpful-btn">Helpful? <span>0</span></button>
+                            </div>
+                            
+                            <h5>What Happened</h5>
+                            <p>Describe what went wrong...</p>
+                            
+                            <h5>Root Cause</h5>
+                            <p>Explain the root cause...</p>
+                            
+                            <h5>Solution</h5>
+                            <p>Steps to fix:</p>
+                            <pre class="bg-light p-3 rounded">kubectl command here</pre>
+                            
+                            <h5>Prevention</h5>
+                            <ul>
+                                <li>Prevention tip 1</li>
+                                <li>Prevention tip 2</li>
+                                <li>Prevention tip 3</li>
                             </ul>
                         </div>
                     </div>
