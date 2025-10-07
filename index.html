@@ -9,98 +9,183 @@
     <style>
         :root {
             --primary-color: #326ce5;
+            --primary-dark: #2557c7;
             --secondary-color: #f8f9fa;
             --accent-color: #ff6b6b;
-            --text-color: #333;
+            --success-color: #28a745;
+            --text-color: #2c3e50;
             --light-text: #6c757d;
-            --border-color: #dee2e6;
+            --border-color: #e1e8ed;
+            --hover-bg: #f0f4f8;
+            --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             color: var(--text-color);
-            background-color: #f5f7fb;
-            padding-top: 56px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8f0f7 100%);
+            padding-top: 70px;
+            line-height: 1.6;
         }
         
         .navbar {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
         }
         
         .navbar-brand {
             font-weight: 700;
             color: var(--primary-color);
+            font-size: 1.4rem;
+            transition: transform 0.2s ease;
+        }
+        
+        .navbar-brand:hover {
+            transform: translateY(-2px);
         }
         
         .search-bar {
             max-width: 500px;
         }
         
+        .search-bar input {
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            padding: 0.6rem 1rem;
+        }
+        
+        .search-bar input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(50, 108, 229, 0.1);
+        }
+        
         .hero-section {
-            background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             color: white;
-            padding: 3rem 0;
-            margin-bottom: 2rem;
-            border-radius: 0 0 10px 10px;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+            border-radius: 0 0 30px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .hero-section h1 {
+            font-weight: 800;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-section p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
         }
         
         .card {
             border: none;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 24px;
+            background: white;
+            overflow: hidden;
         }
         
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
         }
         
         .card-header {
-            background-color: white;
-            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-bottom: 2px solid var(--border-color);
             font-weight: 600;
+            padding: 1.2rem 1.5rem;
+            font-size: 1.05rem;
         }
         
         .issue-tag {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
+            padding: 4px 12px;
+            border-radius: 20px;
             font-size: 0.8rem;
-            margin-right: 8px;
+            margin-right: 10px;
+            font-weight: 600;
+            display: inline-block;
+            box-shadow: 0 2px 8px rgba(50, 108, 229, 0.3);
         }
         
         .issue-meta {
             color: var(--light-text);
             font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .card-text {
+            color: var(--light-text);
+            line-height: 1.7;
+            margin-bottom: 1.2rem;
         }
         
         .helpful-btn {
             background-color: var(--secondary-color);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 2px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            padding: 6px 20px;
             font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
         
         .helpful-btn:hover {
             background-color: var(--primary-color);
             color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
         }
         
         .sidebar {
             background-color: white;
-            border-radius: 10px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 1.8rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 24px;
         }
         
         .sidebar-title {
-            font-weight: 600;
-            margin-bottom: 1rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
             color: var(--primary-color);
+            font-size: 1.1rem;
         }
         
         .category-list {
@@ -109,35 +194,41 @@
         }
         
         .category-list li {
-            margin-bottom: 0.5rem;
-            padding: 0.5rem;
-            border-radius: 5px;
+            margin-bottom: 0.6rem;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
         
         .category-list li:hover {
-            background-color: var(--secondary-color);
+            background-color: var(--hover-bg);
+            transform: translateX(5px);
         }
         
         .category-list li.active {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
+            box-shadow: 0 4px 12px rgba(50, 108, 229, 0.3);
         }
         
         .badge-new {
-            background-color: var(--accent-color);
+            background: linear-gradient(135deg, var(--accent-color) 0%, #ff5252 100%);
             color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 12px;
             font-size: 0.7rem;
             margin-left: 10px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
         }
         
         footer {
             background-color: white;
-            padding: 2rem 0;
+            padding: 2.5rem 0;
             margin-top: 3rem;
-            border-top: 1px solid var(--border-color);
+            border-top: 2px solid var(--border-color);
         }
         
         .content-section {
@@ -151,13 +242,60 @@
         .back-button {
             color: var(--primary-color);
             text-decoration: none;
-            font-weight: 500;
-            margin-bottom: 1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
             display: inline-block;
+            transition: all 0.3s ease;
         }
         
         .back-button:hover {
-            text-decoration: underline;
+            transform: translateX(-5px);
+            color: var(--primary-dark);
+        }
+        
+        .btn-outline-primary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(50, 108, 229, 0.3);
+        }
+        
+        .alert {
+            border-radius: 12px;
+            border: none;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-primary {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: #1565c0;
+        }
+        
+        .alert-info {
+            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+            color: #0277bd;
+        }
+        
+        pre {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+            overflow-x: auto;
+        }
+        
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
         }
     </style>
 </head>
@@ -197,7 +335,7 @@
         <div class="row">
             <!-- Sidebar -->
             <div class="col-lg-3">
-                <div class="sidebar mb-4">
+                <div class="sidebar">
                     <h3 class="sidebar-title">Categories</h3>
                     <ul class="category-list">
                         <li class="active" data-category="all">All Issues</li>
@@ -212,7 +350,7 @@
                     <h3 class="sidebar-title">Announcements</h3>
                     <div class="alert alert-primary">
                         <span class="badge-new">NEW</span>
-                        <strong>OUR Course will be Aviliable</strong>
+                        <strong>Our Course will be Available</strong>
                     </div>
                     <div class="alert alert-info">
                         Join Us <strong>On</strong> Discord
@@ -491,7 +629,6 @@ sudo systemctl restart kubelet</pre>
                     this.classList.add('active');
                     
                     // In a real app, you would filter the issues here
-                    // For this demo, we'll just show a message
                     const category = this.getAttribute('data-category');
                     if (category !== 'all') {
                         alert('In a real application, this would filter issues by category: ' + category);
@@ -507,8 +644,9 @@ sudo systemctl restart kubelet</pre>
                     count++;
                     countElement.textContent = count;
                     
-                    this.classList.add('btn-primary');
-                    this.classList.remove('btn-outline-primary');
+                    this.style.backgroundColor = 'var(--primary-color)';
+                    this.style.color = 'white';
+                    this.style.borderColor = 'var(--primary-color)';
                     
                     // Disable the button after click
                     this.disabled = true;

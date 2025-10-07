@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kubernetes Production Issues</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #326ce5;
+            --secondary-color: #f8f9fa;
+            --accent-color: #ff6b6b;
+            --text-color: #333;
+            --light-text: #6c757d;
+            --border-color: #dee2e6;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background-color: #f5f7fb;
+            padding-top: 56px;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .search-bar {
+            max-width: 500px;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 10px 10px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+        
+        .issue-tag {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+        }
+        
+        .issue-meta {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+        
+        .helpful-btn {
+            background-color: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2px 15px;
+            font-size: 0.9rem;
+        }
+        
+        .helpful-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .sidebar {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .category-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .category-list li {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .category-list li:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .category-list li.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .badge-new {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-left: 10px;
+        }
+        
+        footer {
+            background-color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .back-button {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        
+        .back-button:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-dharmachakra me-2"></i>K8s Issues Explorer
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="ms-auto">
+                    <div class="input-group search-bar">
+                        <input type="text" class="form-control" placeholder="Search Kubernetes Production Issues..." id="searchInput">
+                        <button class="btn btn-outline-primary" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold">Kubernetes Production Issues</h1>
+            <p class="lead">A collection of real-world Kubernetes production issues and their solutions</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3">
+                <div class="sidebar mb-4">
+                    <h3 class="sidebar-title">Categories</h3>
+                    <ul class="category-list">
+                        <li class="active" data-category="all">All Issues</li>
+                        <li data-category="cluster">Cluster Management</li>
+                        <li data-category="networking">Networking</li>
+                        <li data-category="storage">Storage</li>
+                        <li data-category="security">Security</li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar">
+                    <h3 class="sidebar-title">Announcements</h3>
+                    <div class="alert alert-primary">
+                        <span class="badge-new">NEW</span>
+                        <strong>OUR Course will be Aviliable</strong>
+                    </div>
+                    <div class="alert alert-info">
+                        Join Us <strong>On</strong> Discord
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="col-lg-9">
+                <!-- Listing View -->
+                <div id="listingView" class="content-section active">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Recent Issues</h2>
+                        <div class="btn-group">
+                            <button class="btn btn-outline-primary btn-sm">Newest</button>
+                            <button class="btn btn-outline-secondary btn-sm">Popular</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Issue Cards -->
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="issue-tag">1.1 Cluster Management</span>
+                                Zombie Pods Causing NodeDrain to Hang
+                            </div>
+                            <span class="issue-meta">2 days ago</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">K8s v1.23, On-prem bare metal, Systemd cgroups. Node drain stuck indefinitely due to unresponsive terminating pod.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="#" class="btn btn-outline-primary btn-sm read-more" data-issue="1">Read More</a>
+                                <button class="helpful-btn">Helpful? <span>0</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="issue-tag">2.2 Cluster Management</span>
+                                API Server Crash Due to Excessive CRD Writes
+                            </div>
+                            <span class="issue-meta">1 week ago</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">K8s v1.24, GKE, heavy use of custom controllers. API server crashed due to flooding by a misconfigured controller.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="#" class="btn btn-outline-primary btn-sm read-more" data-issue="2">Read More</a>
+                                <button class="helpful-btn">Helpful? <span>0</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="issue-tag">3.3 Cluster Management</span>
+                                Node Not Rejoining After Reboot
+                            </div>
+                            <span class="issue-meta">3 weeks ago</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">K8s v1.21, Self-managed cluster, Static nodes. A rebooted node failed to rejoin the cluster due to kubelet identity mismatch.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="#" class="btn btn-outline-primary btn-sm read-more" data-issue="3">Read More</a>
+                                <button class="helpful-btn">Helpful? <span>0</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Detail Views -->
+                <div id="detailView1" class="content-section">
+                    <a href="#" class="back-button"><i class="fas fa-arrow-left me-2"></i>Back to all scenarios</a>
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="issue-tag">Scenario A: (1) Cluster Management</span>
+                            <span class="issue-meta">K8s v1.2.4, multi-tenant namespace setup</span>
+                        </div>
+                        <div class="card-body">
+                            <h3>Zombie Pods Causing NodeDrain to Hang</h3>
+                            <p class="text-muted">Cluster workloads failed after applying overly strict resource quotas that denied new pod creation.</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div>
+                                    <span class="badge bg-warning">Medium Severity</span>
+                                    <span class="badge bg-info">K8s v1.23</span>
+                                </div>
+                                <button class="helpful-btn">Helpful? <span>0</span></button>
+                            </div>
+                            
+                            <h5>What Happened</h5>
+                            <p>A new quota was applied with very low CPU/memory limits. All new pods across namespaces failed scheduling.</p>
+                            
+                            <h5>Root Cause</h5>
+                            <p>The resource quota was set too low for the cluster's minimum requirements, preventing any new pods from being scheduled.</p>
+                            
+                            <h5>Solution</h5>
+                            <p>Edited the ResourceQuota object to increase the limits:</p>
+                            <pre class="bg-light p-3 rounded">kubectl edit quota my-quota -n my-namespace</pre>
+                            <p>Increased the CPU and memory limits to appropriate values for the cluster.</p>
+                            
+                            <h5>Prevention</h5>
+                            <ul>
+                                <li>Test resource quotas in a non-production environment first</li>
+                                <li>Set realistic limits based on actual pod requirements</li>
+                                <li>Monitor resource usage regularly</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="detailView2" class="content-section">
+                    <a href="#" class="back-button"><i class="fas fa-arrow-left me-2"></i>Back to all scenarios</a>
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="issue-tag">Scenario B: (2) Cluster Management</span>
+                            <span class="issue-meta">K8s v1.24, GKE, custom controllers</span>
+                        </div>
+                        <div class="card-body">
+                            <h3>API Server Crash Due to Excessive CRD Writes</h3>
+                            <p class="text-muted">API server became unresponsive due to excessive load from Custom Resource Definition operations.</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div>
+                                    <span class="badge bg-danger">High Severity</span>
+                                    <span class="badge bg-info">K8s v1.24</span>
+                                </div>
+                                <button class="helpful-btn">Helpful? <span>0</span></button>
+                            </div>
+                            
+                            <h5>What Happened</h5>
+                            <p>The API server began crashing repeatedly, making the cluster unavailable. This occurred after deploying a new custom controller.</p>
+                            
+                            <h5>Root Cause</h5>
+                            <p>A misconfigured custom controller was creating thousands of CRD updates per second, overwhelming the API server.</p>
+                            
+                            <h5>Solution</h5>
+                            <p>Identified and deleted the problematic controller:</p>
+                            <pre class="bg-light p-3 rounded">kubectl get deployments -n kube-system
+kubectl delete deployment faulty-controller -n kube-system</pre>
+                            <p>Restarted the API server to clear the pending requests.</p>
+                            
+                            <h5>Prevention</h5>
+                            <ul>
+                                <li>Implement rate limiting in custom controllers</li>
+                                <li>Test controllers under load before deploying to production</li>
+                                <li>Monitor API server metrics closely after controller deployments</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="detailView3" class="content-section">
+                    <a href="#" class="back-button"><i class="fas fa-arrow-left me-2"></i>Back to all scenarios</a>
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="issue-tag">Scenario C: (3) Cluster Management</span>
+                            <span class="issue-meta">K8s v1.21, Self-managed, Static nodes</span>
+                        </div>
+                        <div class="card-body">
+                            <h3>Node Not Rejoining After Reboot</h3>
+                            <p class="text-muted">After a planned reboot, a worker node failed to rejoin the Kubernetes cluster.</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div>
+                                    <span class="badge bg-warning">Medium Severity</span>
+                                    <span class="badge bg-info">K8s v1.21</span>
+                                </div>
+                                <button class="helpful-btn">Helpful? <span>0</span></button>
+                            </div>
+                            
+                            <h5>What Happened</h5>
+                            <p>After rebooting a worker node for maintenance, the node failed to rejoin the cluster. The kubelet was running but not registering with the control plane.</p>
+                            
+                            <h5>Root Cause</h5>
+                            <p>The kubelet had lost its credentials and could not authenticate with the API server. This was due to certificate expiration on the node.</p>
+                            
+                            <h5>Solution</h5>
+                            <p>Regenerated kubelet credentials on the affected node:</p>
+                            <pre class="bg-light p-3 rounded">sudo kubeadm alpha certs renew all
+sudo systemctl restart kubelet</pre>
+                            <p>Verified node rejoined the cluster with:</p>
+                            <pre class="bg-light p-3 rounded">kubectl get nodes</pre>
+                            
+                            <h5>Prevention</h5>
+                            <ul>
+                                <li>Regularly check certificate expiration in the cluster</li>
+                                <li>Implement automated certificate rotation</li>
+                                <li>Monitor node status after reboots</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Kubernetes Production Issues</h5>
+                    <p class="text-muted">A collection of real-world Kubernetes production issues and their solutions.</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-muted">Contribute</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">About</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Connect</h5>
+                    <div class="d-flex">
+                        <a href="#" class="text-decoration-none text-muted me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-decoration-none text-muted me-3"><i class="fab fa-github fa-lg"></i></a>
+                        <a href="#" class="text-decoration-none text-muted"><i class="fab fa-slack fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <p class="text-center text-muted">© 2025 K8s Issues Explorer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle read more buttons
+            document.querySelectorAll('.read-more').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const issueId = this.getAttribute('data-issue');
+                    
+                    // Hide all content sections
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Show the selected detail view
+                    document.getElementById('detailView' + issueId).classList.add('active');
+                    
+                    // Scroll to top
+                    window.scrollTo(0, 0);
+                });
+            });
+            
+            // Handle back buttons
+            document.querySelectorAll('.back-button').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Hide all content sections
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Show the listing view
+                    document.getElementById('listingView').classList.add('active');
+                });
+            });
+            
+            // Handle category clicks
+            document.querySelectorAll('.category-list li').forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all items
+                    document.querySelectorAll('.category-list li').forEach(li => {
+                        li.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // In a real app, you would filter the issues here
+                    // For this demo, we'll just show a message
+                    const category = this.getAttribute('data-category');
+                    if (category !== 'all') {
+                        alert('In a real application, this would filter issues by category: ' + category);
+                    }
+                });
+            });
+            
+            // Handle helpful buttons
+            document.querySelectorAll('.helpful-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const countElement = this.querySelector('span');
+                    let count = parseInt(countElement.textContent);
+                    count++;
+                    countElement.textContent = count;
+                    
+                    this.classList.add('btn-primary');
+                    this.classList.remove('btn-outline-primary');
+                    
+                    // Disable the button after click
+                    this.disabled = true;
+                });
+            });
+            
+            // Handle search
+            document.getElementById('searchInput').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    alert('In a real application, this would search for: ' + this.value);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
